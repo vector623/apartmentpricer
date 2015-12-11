@@ -1,0 +1,30 @@
+#vim files
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+ 
+#svn
+.svn
+ 
+#rails
+/.bundle
+ 
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+ 
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+!/log/.keep
+
+#credentials
+/config/database.yml
+/creds
+*.password
+ 
+#schema not needed
+schema.rb
