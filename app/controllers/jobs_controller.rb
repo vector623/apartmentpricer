@@ -28,7 +28,7 @@ class JobsController < ApplicationController
         html: Base64.encode64(Zlib::Deflate.deflate(page.gsub("\u0000", ''))))
     end
 
-    render :inline => "done"
+    render :text => "done"
   end
 
   def parselistings
@@ -61,7 +61,7 @@ class JobsController < ApplicationController
       new_listings.each do |l| l.save end
     end
 
-    render :inline => "done"
+    render :text => "done"
   end
 
   def updatefloorplans
@@ -104,6 +104,6 @@ class JobsController < ApplicationController
       #TODO fix dups getting inserted
     end
 
-    render :inline => "done"
+    render :text => "done"
   end
 end
