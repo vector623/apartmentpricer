@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  page_pull_id: 
+  unitname: MyString
+  unitnum: MyString
+  floor: 1
+  rent: 9.99
+  movein: 2015-12-11
+
+two:
+  page_pull_id: 
+  unitname: MyString
+  unitnum: MyString
+  floor: 3
+  rent: 9.99
+  movein: 2015-12-11
