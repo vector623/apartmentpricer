@@ -16,7 +16,7 @@ class JobsController < ApplicationController
       :camdendunwoody => 'https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3'}
 
     #capybara/poultergeist/phantomjs is a headless javascript enabled browser!!!
-    session = Capybara::Session.new(:poltergeist)
+    session = Capybara::Session.new(:poltergeist) #TODO set higher timeout
 
     sites.each_pair do |loc,url|
       session.visit(url)
@@ -73,13 +73,13 @@ class JobsController < ApplicationController
 
       "select * " +
       "from page_pulls " +
-      "where created_at > (select latestdate from created_ats order by latestdate desc limit 1) " +
-      "and location = 'camdendunwoody'"
+      "where created_at > (select latestdate from created_ats order by latestdate desc limit 1);"
     unparsed_pagepulls = PagePull.find_by_sql(unparsed_pagepulls_sql)
 
-    current_floorplans = unparsed_pagepulls.collect {|upp|
+    existing_floorplans = FloorPlan.all
+    current_floorplans = unparsed_pagepulls.map {|upp|
       Nokogiri::HTML(upp.dhtml).css("div[class='available-apartment-card default-gutter']").
-        collect {|div|
+        map {|div|
           FloorPlan.new do |fp|
             fp.name = div.css("h3 span[class='floorplan-name']").text
             fp.sqft = div.css("div[class='card unit-info']").css('span')[1].text.gsub(/SqFt /,'')
@@ -89,11 +89,19 @@ class JobsController < ApplicationController
         }
     }.flatten
 
+    insert_floorplans = current_floorplans.
+      select {|cfp| not existing_floorplans.map{|efp| efp.name}.include? cfp.name }
+    update_floorplans = existing_floorplans.
+      select {|efp| current_floorplans.map{|cfp| cfp.name}.include? efp.name }
+
     ActiveRecord::Base.transaction do 
       #insert new records
       current_floorplans.each do |fp| fp.save end 
       #update updated_at on floorplans (so that unprocessed page pulls will all be after latest updated_at)
-      #ActiveRecord::Base.connection.execute("update floor_plans set updated_at = current_time;")
+      #TODO rewrite this the right way
+      updatetime = Time.zone.now
+      FloorPlan.all.each do |fp| fp.updated_at = updatetime; fp.save end 
+      #TODO fix dups getting inserted
     end
 
     render :inline => "done"
