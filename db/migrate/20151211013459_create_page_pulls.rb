@@ -3,7 +3,7 @@ class CreatePagePulls < ActiveRecord::Migration
     create_table :page_pulls do |t|
       t.string :location
       t.string :url
-      t.text :html
+      t.binary :html
 
       t.timestamps null: false
     end

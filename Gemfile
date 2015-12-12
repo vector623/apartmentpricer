@@ -18,6 +18,8 @@ gem 'nokogiri'
 gem 'pry'
 gem 'activerecord'
 gem 'pg'
+gem 'capybara'
+gem 'poltergeist'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
