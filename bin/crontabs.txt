@@ -1,0 +1,2 @@
+#add this to crontab of initiating machine
+*/10 * * * * wget <url>/util/pullcamden
