@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   get 'jobs/util'
-  get 'jobs/pullcamden'
-  get 'jobs/parselistings'
-  get 'jobs/updatefloorplans'
+  get 'jobs/updateprices'
+  get 'jobs/pullcamdentest'
+  get 'jobs/parselistingstest'
+  get 'jobs/updatefloorplanstest'
+
+  get 'charts/util'
 end

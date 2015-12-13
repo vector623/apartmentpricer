@@ -10,13 +10,21 @@ class JobsController < ApplicationController
     binding.pry
   end
 
+  def updateprices
+    pullcamden
+    parselistings
+    updatefloorplans
+
+    render :text => "done"
+  end
+
   def pullcamden
     sites = {
       :camdencreekstone => 'https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9',
       :camdendunwoody => 'https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3'}
 
     #capybara/poultergeist/phantomjs is a headless javascript enabled browser!!!
-    session = Capybara::Session.new(:poltergeist) #TODO set higher timeout
+    session = Capybara::Session.new(:poltergeist, {:timeout => 180})
 
     sites.each_pair do |loc,url|
       session.visit(url)
@@ -27,8 +35,6 @@ class JobsController < ApplicationController
         url: url, 
         html: Base64.encode64(Zlib::Deflate.deflate(page.gsub("\u0000", ''))))
     end
-
-    render :text => "done"
   end
 
   def parselistings
@@ -60,8 +66,6 @@ class JobsController < ApplicationController
     ActiveRecord::Base.transaction do
       new_listings.each do |l| l.save end
     end
-
-    render :text => "done"
   end
 
   def updatefloorplans
@@ -81,6 +85,7 @@ class JobsController < ApplicationController
       Nokogiri::HTML(upp.dhtml).css("div[class='available-apartment-card default-gutter']").
         map {|div|
           FloorPlan.new do |fp|
+            fp.location = upp.location
             fp.name = div.css("h3 span[class='floorplan-name']").text
             fp.sqft = div.css("div[class='card unit-info']").css('span')[1].text.gsub(/SqFt /,'')
             fp.beds = div.css("div[class='card unit-info']").css('span')[2].text.gsub(/Beds /,'')
@@ -103,7 +108,18 @@ class JobsController < ApplicationController
       FloorPlan.all.each do |fp| fp.updated_at = updatetime; fp.save end 
       #TODO fix dups getting inserted
     end
+  end
 
-    render :text => "done"
+  def pullcamdentest
+    pullcamden
+    render nothing: true
+  end
+  def parselistingstest
+    parselistings
+    render nothing: true
+  end
+  def updatefloorplanstest
+    updatefloorplans 
+    render nothing: true
   end
 end
