@@ -3,3 +3,4 @@ class AddPagePullIdToFloorPlans < ActiveRecord::Migration
     add_column :floor_plans, :page_pull_id, :integer
   end
 end
+

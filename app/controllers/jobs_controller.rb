@@ -28,7 +28,6 @@ class JobsController < ApplicationController
 
     sites.each_pair do |loc,url|
       begin
-        binding.pry
         session.visit(url)
       end
       page = session.html
