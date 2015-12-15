@@ -59,7 +59,7 @@ class ChartsController < ApplicationController
       },
       :last_post => prices.
         sort_by {|s| s.fetched_at}.
-        first.
+        last.
         fetched_at.
         in_time_zone('Eastern Time (US & Canada)').
         strftime('%I:%M%P %Y-%m-%d')
