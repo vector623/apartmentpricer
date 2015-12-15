@@ -37,7 +37,7 @@ class ChartsController < ApplicationController
               :fetched_at_dateutc => "Date.UTC(#{s.fetched_at.strftime('%C%y,%m,%e')})",
               :rent => s.rent,
               :sqft => s.sqft,
-              :sqft_per_dollar => s.sqft_per_dollar,
+              :sqft_per_dollar => s.sqft_per_dollar.round(4),
               :current => s.current
             }
           },
@@ -64,6 +64,7 @@ class ChartsController < ApplicationController
         in_time_zone('Eastern Time (US & Canada)').
         strftime('%I:%M%P %Y-%m-%d')
     }
+    binding.pry
 
     @prices = datahash
   end

@@ -10,14 +10,14 @@ class JobsController < ApplicationController
   end
 
   def updateprices
-    pullcamden
-    parselistings
+    pullpages
+    parselistings_camden
     updatefloorplans
 
     render :text => "done"
   end
 
-  def pullcamden
+  def pullpages
     sites = {
       :camdencreekstone => 'https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9',
       :camdendunwoody => 'https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3'}
@@ -38,7 +38,7 @@ class JobsController < ApplicationController
     end
   end
 
-  def parselistings
+  def parselistings_camden
     unparsed_pagepull_sql = 
       'select * ' +
       'from page_pulls ' +
@@ -69,7 +69,7 @@ class JobsController < ApplicationController
     end
   end
 
-  def updatefloorplans
+  def updatefloorplans_camden
     unparsed_pagepulls_sql = 
       "with created_ats as " +
       "(select updated_at as latestdate from floor_plans " +
