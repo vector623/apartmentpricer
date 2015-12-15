@@ -104,12 +104,12 @@ class JobsController < ApplicationController
     pullcamden
     render nothing: true
   end
-  def parselistingstest
-    parselistings
+  def parselistings_camdentest
+    parselistings_camden
     render nothing: true
   end
-  def updatefloorplanstest
-    updatefloorplans 
+  def updatefloorplans_camdentest
+    updatefloorplans_camden
     render nothing: true
   end
 end
