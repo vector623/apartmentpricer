@@ -1,0 +1,113 @@
+<script>
+$(function () {
+    $('#apartment_prices').highcharts({
+        chart: {
+            type: 'bubble',
+            plotBorderWidth: 1,
+            zoomType: 'xy'
+        },
+        title: { text: 'Apartment Prices' },
+        subtitle: { text: 'last updated at <%= @prices[:last_post] %>', },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+              //minute: '%H:%M %m-%d',
+              //hour: '%H:%M %m-%d',
+              //day: '%H:%M %m-%d',
+              day: '%y-%m-%d',
+            },
+            plotLines: [{
+                color: 'black',
+                dashStyle: 'dot',
+                width: 2,
+                value: 65,
+                zIndex: 3
+            }],
+        },
+        yAxis: {
+            type: 'logarithmic',
+            startOnTick: false,
+            endOnTick: false,
+            title: { text: 'sales' },
+            labels: { format: '${value}' },
+            maxPadding: 0.2,
+            plotLines: [{
+                color: 'black',
+                dashStyle: 'dot',
+                width: 2,
+                value: 50,
+                zIndex: 3
+            }]
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: 10,
+            y: 70,
+            floating: false,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+            borderWidth: 1
+        },
+        tooltip: {
+            useHTML: true,
+            headerFormat: '<table>',
+            pointFormat: 
+                '<tr><th colspan="2"><h3>{point.location}, {point.unitname} #{point.unitnum}</h3></th></tr>' +
+                '<tr><th>floor:</th><td>{point.floor}</td></tr>' + 
+                '<tr><th>beds:</th><td>{point.beds}</td></tr>' + 
+                '<tr><th>baths:</th><td>{point.baths}</td></tr>' + 
+                '<tr><th>movein:</th><td>{point.movein}</td></tr>' + 
+                '<tr><th>fetched_at:</th><td>{point.fetched_at}</td></tr>' + 
+                '<tr><th>rent:</th><td>{point.rent}</td></tr>' + 
+                '<tr><th>sqft:</th><td>{point.sqft}</td></tr>' + 
+                '<tr><th>sqft_per_dollar:</th><td>{point.sqft_per_dollar}</td></tr>' + 
+                '<tr><th>current:</th><td>{point.current}</td></tr>',
+            footerFormat: '</table>',
+            followPointer: true
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                }
+            }
+        },
+
+        series: [
+          <% @prices[:rooms].each do |k,v| %>
+            {
+              name: '<%= k.to_s %>',
+              color: '<%= @prices[:options][k][:color] %>',
+              visible: <%= @prices[:options][k][:visible] %>,
+              data: [
+                  <% @prices[:prices][k].each do |s| %>
+                    {
+                      x:<%= s[:movein_dateutc] %>,
+                      y:<%= s[:rent] %>,
+                      z:<%= s[:sqft_per_dollar] %>,
+                      location: '<%= s[:location] %>',
+                      unitname: '<%= s[:unitname] %>',
+                      unitnum: '<%= s[:unitnum] %>',
+                      floor: '<%= s[:floor] %>',
+                      beds: '<%= s[:beds] %>',
+                      bath: '<%= s[:bath] %>',
+                      movein: '<%= s[:movein] %>',
+                      fetched_at: '<%= s[:fetched_at] %>',
+                      rent: '<%= s[:rent] %>',
+                      sqft: '<%= s[:sqft] %>',
+                      sqft_per_dollar: '<%= s[:sqft_per_dollar] %>',
+                      current: '<%= s[:current] %>',
+                    },
+                  <% end %>
+              ]
+            },
+          <% end %>
+        ],
+
+    });
+});
+</script>
+
+<div id="apartment_prices" style="width: 100%; height: 600px"></div>

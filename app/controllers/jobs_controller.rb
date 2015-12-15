@@ -6,7 +6,6 @@ require 'capybara/poltergeist'
 
 class JobsController < ApplicationController
   def util
-    pagepulls = PagePull.all
     binding.pry
   end
 

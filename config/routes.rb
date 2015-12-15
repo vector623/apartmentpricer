@@ -5,5 +5,7 @@ Rails.application.routes.draw do
   get 'jobs/parselistingstest'
   get 'jobs/updatefloorplanstest'
 
+  get 'charts/prices'
+
   get 'charts/util'
 end

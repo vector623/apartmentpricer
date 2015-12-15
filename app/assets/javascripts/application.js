@@ -13,4 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require highcharts
+//= require highcharts-more
+//= require solid-gauge
+//= require funnel
+//= require drilldown
 //= require_tree .
