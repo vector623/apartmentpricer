@@ -12,7 +12,7 @@ class JobsController < ApplicationController
   def updateprices
     pullpages
     parselistings_camden
-    updatefloorplans
+    updatefloorplans_camden
 
     render :text => "done"
   end
