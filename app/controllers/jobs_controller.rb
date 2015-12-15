@@ -24,10 +24,13 @@ class JobsController < ApplicationController
       :camdendunwoody => 'https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3'}
 
     #capybara/poultergeist/phantomjs is a headless javascript enabled browser!!!
-    session = Capybara::Session.new(:poltergeist, {:timeout => 180})
+    session = Capybara::Session.new(:poltergeist, {:timeout => 3600})
 
     sites.each_pair do |loc,url|
-      session.visit(url)
+      begin
+        binding.pry
+        session.visit(url)
+      end
       page = session.html
 
       PagePull.create(
@@ -77,7 +80,6 @@ class JobsController < ApplicationController
 
       "select * " +
       "from page_pulls " +
-      #"where created_at > (select latestdate from created_ats order by latestdate desc limit 1);"
       "where id not in (select page_pull_id from floor_plans);"
     unparsed_pagepulls = PagePull.find_by_sql(unparsed_pagepulls_sql)
 
@@ -95,11 +97,7 @@ class JobsController < ApplicationController
         }
     }.flatten
 
-    #insert_floorplans = current_floorplans.
-    #  select {|cfp| not existing_floorplans.map{|efp| efp.name}.include? cfp.name }
-
     ActiveRecord::Base.transaction do 
-      #insert new records
       current_floorplans.each do |fp| fp.save end 
     end
   end
