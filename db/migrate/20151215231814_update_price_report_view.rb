@@ -73,6 +73,7 @@ class UpdatePriceReportView < ActiveRecord::Migration
               joined.movein
             ORDER BY 
               joined.fetched_at DESC,
+              joined.sqft_per_dollar desc,
               uuid_generate_v4()) AS drank
         FROM joined)
 
