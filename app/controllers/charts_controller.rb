@@ -64,7 +64,6 @@ class ChartsController < ApplicationController
         in_time_zone('Eastern Time (US & Canada)').
         strftime('%I:%M%P %Y-%m-%d')
     }
-    binding.pry
 
     @prices = datahash
   end
