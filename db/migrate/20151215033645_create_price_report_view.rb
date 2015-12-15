@@ -1,6 +1,8 @@
 class CreatePriceReportView < ActiveRecord::Migration
   def up
     execute <<-SQL
+      --INSTALL postgresql-contrib first!
+      CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
       CREATE OR REPLACE VIEW price_report AS 
         WITH floor_plans_ranked AS 
         (SELECT 
