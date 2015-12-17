@@ -19,24 +19,29 @@ class JobsController < ApplicationController
 
   def pullpages
     sites = {
-      :camdencreekstone => 'https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9',
-      :camdendunwoody => 'https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3',
-      #:tenperimeterpark => 'https://living10perimeterpark.securecafe.com/onlineleasing/10-perimeter-park/oleapplication.aspx?stepname=Apartments&myOlePropertyId=171003'
+      :camden => 
+        {:creekstone => 'https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9',
+         :dunwoody => 'https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3'},
+      :tenperimeterpark =>
+        {:perimeter => 'https://living10perimeterpark.securecafe.com/onlineleasing/10-perimeter-park/oleapplication.aspx?stepname=Apartments&myOlePropertyId=171003'}
     }
 
     #capybara/poultergeist/phantomjs is a headless javascript enabled browser!!!
     session = Capybara::Session.new(:poltergeist, {:timeout => 3600})
+    
+    sites.each_pair do |trust,location|
+      location.each_pair do |loc,url|
+        begin
+          session.visit(url)
+        end
+        page = session.html
 
-    sites.each_pair do |loc,url|
-      begin
-        session.visit(url)
+        PagePull.create(
+          trust: trust,
+          location: loc, 
+          url: url, 
+          html: Base64.encode64(Zlib::Deflate.deflate(page.gsub("\u0000", ''))))
       end
-      page = session.html
-
-      PagePull.create(
-        location: loc, 
-        url: url, 
-        html: Base64.encode64(Zlib::Deflate.deflate(page.gsub("\u0000", ''))))
     end
   end
 
@@ -44,7 +49,8 @@ class JobsController < ApplicationController
     unparsed_pagepull_sql = 
       'select * ' +
       'from page_pulls ' +
-      'where id not in (select page_pull_id from apartment_listings)'
+      "where trust = 'camden' " +
+      'and id not in (select page_pull_id from apartment_listings)'
     unparsed_pagepulls = PagePull.find_by_sql(unparsed_pagepull_sql)
 
     div_classes = 'card-switch card-region-overlay pos-top pos-left pos-bottom inverted face-back'
@@ -80,7 +86,8 @@ class JobsController < ApplicationController
 
       "select * " +
       "from page_pulls " +
-      "where id not in (select page_pull_id from floor_plans);"
+      "where trust = 'camden' " +
+      "and id not in (select page_pull_id from floor_plans);"
     unparsed_pagepulls = PagePull.find_by_sql(unparsed_pagepulls_sql)
 
     current_floorplans = unparsed_pagepulls.map {|upp|

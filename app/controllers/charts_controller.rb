@@ -1,4 +1,4 @@
-class ChartsController < ApplicationController
+class ChartsController < ApplicationController 
   def util
     binding.pry
   end
@@ -25,7 +25,8 @@ class ChartsController < ApplicationController
           select {|s| s.beds.eql? v[1] }.
           collect {|s|
             {
-              :location => s.location.gsub(/camden/,'').capitalize,
+              :trust => s.trust,
+              :location => s.location,
               :unitname => s.unitname,
               :unitnum => s.unitnum,
               :floor => s.floor,
