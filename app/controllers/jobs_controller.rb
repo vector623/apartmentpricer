@@ -20,7 +20,9 @@ class JobsController < ApplicationController
   def pullpages
     sites = {
       :camdencreekstone => 'https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9',
-      :camdendunwoody => 'https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3'}
+      :camdendunwoody => 'https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3',
+      #:tenperimeterpark => 'https://living10perimeterpark.securecafe.com/onlineleasing/10-perimeter-park/oleapplication.aspx?stepname=Apartments&myOlePropertyId=171003'
+    }
 
     #capybara/poultergeist/phantomjs is a headless javascript enabled browser!!!
     session = Capybara::Session.new(:poltergeist, {:timeout => 3600})
