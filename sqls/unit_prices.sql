@@ -1,35 +1,30 @@
-with fp as
-(select
-  name,
-  sqft,
-  rank() over (partition by name,sqft order by created_at desc) r
-from floor_plans),
-
-a as 
+with al as 
 (select 
+  pp.trust,
+  pp.location,
   a.page_pull_id,
   a.unitname,
   a.unitnum,
   a.floor,
-  fp.sqft,
   a.rent,
   a.movein,
-  rank() over (partition by a.unitname,a.unitnum,a.rent order by a.created_at desc) r 
+  rank() over (partition by pp.trust,pp.location,a.unitname,a.unitnum,a.rent order by a.created_at desc) r 
 from apartment_listings a
-join fp on a.unitname = fp.name and fp.r = 1
-order by created_at) 
+left outer join page_pulls pp on a.page_pull_id = pp.id
+order by pp.created_at)
 
 select 
-  pp.trust,
-  pp.location,
-  a.unitname,
-  a.unitnum,
-  a.floor,
-  a.sqft,
-  a.rent,
-  a.movein,
+  al.trust,
+  al.location,
+  al.unitname,
+  fp.sqft,
+  al.unitnum,
+  al.floor,
+  al.rent,
+  al.movein,
   pp.created_at
-from a
-join page_pulls pp on a.page_pull_id = pp.id
-where a.r = 1 
-order by a.unitname,a.unitnum;
+from al
+left outer join floor_plans fp on al.page_pull_id = fp.page_pull_id and al.location = fp.location and al.unitname = fp.name
+left outer join page_pulls pp on al.page_pull_id = pp.id
+where al.r = 1 
+order by al.unitname,al.unitnum;
