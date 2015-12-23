@@ -27,4 +27,4 @@ from al
 left outer join floor_plans fp on al.page_pull_id = fp.page_pull_id and al.location = fp.location and al.unitname = fp.name
 left outer join page_pulls pp on al.page_pull_id = pp.id
 where al.r = 1 
-order by al.unitname,al.unitnum;
+order by al.trust,al.location,al.unitname,al.unitnum,pp.created_at

@@ -68,7 +68,6 @@ class ChartsController < ApplicationController
 
     @prices = datahash
     @unit_prices =  ApartmentListing.
-      find_by_sql(File.read('sqls/unit_prices.sql')).
-      sort_by {|row| row.created_at}
+      find_by_sql(File.read('sqls/unit_prices.sql'))
   end
 end
