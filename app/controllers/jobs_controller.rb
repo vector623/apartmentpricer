@@ -6,7 +6,11 @@ require 'capybara/poltergeist'
 
 class JobsController < ApplicationController
   def util
+    unit_prices = ApartmentListing.find_by_sql(File.read('sqls/unit_prices.sql'))
+
     binding.pry
+
+    render :text => 'dd'
   end
 
   def updateprices
@@ -18,10 +22,12 @@ class JobsController < ApplicationController
   end
 
   def pullpages
-    sites =
-      [['camden','creekstone','https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9'],
-       ['camden','dunwoody','https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3'],
-       ['tenperimeterpark','perimeter','https://living10perimeterpark.securecafe.com/onlineleasing/10-perimeter-park/oleapplication.aspx?stepname=Apartments&myOlePropertyId=171003']]
+    sites = [
+      ['camden','creekstone','https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9'],
+      ['camden','dunwoody','https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3'],
+      ['tenperimeterpark',
+       'perimeter',
+       'https://living10perimeterpark.securecafe.com/onlineleasing/10-perimeter-park/oleapplication.aspx?stepname=Apartments&myOlePropertyId=171003']]
 
     #capybara/poultergeist/phantomjs is a headless javascript enabled browser!!!
     session = Capybara::Session.new(:poltergeist, {:timeout => 3600})
