@@ -51,11 +51,11 @@ class ChartsController < ApplicationController
       :prices => datahash,
       :options =>
       {
-        :current_onebr => { :color => 'rgba(255, 0, 0, 1)', :visible => 'false'},
+        :current_onebr => { :color => 'rgba(255, 0, 0, 1)', :visible => 'true'},
         :current_twobr => { :color => 'rgba(0, 255, 0, 1)', :visible => 'true'},
-        :current_threebr => { :color => 'rgba(0, 0, 255, 1)', :visible => 'false'},
+        :current_threebr => { :color => 'rgba(0, 0, 255, 1)', :visible => 'true'},
         :old_onebr => { :color => 'rgba(123, 0, 0, 1)', :visible => 'false'},
-        :old_twobr => { :color => 'rgba(0, 123, 0, 1)', :visible => 'true'},
+        :old_twobr => { :color => 'rgba(0, 123, 0, 1)', :visible => 'false'},
         :old_threebr => { :color => 'rgba(0, 0, 123, 1)', :visible => 'false'},
       },
       :last_post => prices.
