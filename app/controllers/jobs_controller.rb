@@ -56,6 +56,7 @@ class JobsController < ApplicationController
       'and id not in (select page_pull_id from apartment_listings)'
     unparsed_pagepulls = PagePull.find_by_sql(unparsed_pagepull_sql)
 
+    #target "x other units available >" link
     div_classes = 'card-switch card-region-overlay pos-top pos-left pos-bottom inverted face-back'
     new_listings = unparsed_pagepulls.collect {|upp|
       Nokogiri::HTML(upp.dhtml).css("div[class='#{div_classes}']").
@@ -74,6 +75,8 @@ class JobsController < ApplicationController
           }.flatten(1)#end of div.collect
       }.flatten(1)#end of Nokogiri.collect
     }.flatten(1)#end of unparsed_pagepulls.collect
+
+    #TODO: target apartment listings missing the "x other units available >" link
 
     ActiveRecord::Base.transaction do
       new_listings.each do |l| l.save end
