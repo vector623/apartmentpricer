@@ -71,7 +71,6 @@ class ChartsController < ApplicationController
     @unit_price_report =  UnitPriceReport.all.
       select {|row| row.priceupdated }.
       sort_by {|row| [row.unitnum, row.date] }
-    binding.pry
   end
 
   def unit
