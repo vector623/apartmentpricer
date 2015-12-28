@@ -118,3 +118,28 @@ $(function () {
   <a href="https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9">Camden Creekstone</a>
   <a href="https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3">Camden Dunwoody</a>
 </div>
+
+<div id="data">
+  <table>
+    <tr>
+      <th>trust</th>
+      <th>location</th>
+      <th>unitname</th>
+      <th>unitnum</th>
+      <th>date</th>
+      <th>rent</th>
+      <th>movein</th>
+    </tr>
+    <% @unit_price_report.each do |row| %>
+      <tr>
+        <td><%= row.trust %></td>
+        <td><%= row.location %></td>
+        <td><%= row.unitname %></td>
+        <td><%= row.unitnum %></td>
+        <td><%= row.date %></td>
+        <td><%= row.rent %></td>
+        <td><%= row.movein %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
