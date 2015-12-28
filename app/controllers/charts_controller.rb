@@ -88,7 +88,6 @@ class ChartsController < ApplicationController
         :rent => row.attributes['rent'],
         :movein => row.attributes['movein'],}}.
       sort_by {|row| row[:date]}
-    binding.pry
 
     @data = {
       :trust => unit_data.last[:trust],
