@@ -74,6 +74,7 @@ class ChartsController < ApplicationController
   def unit
     @prices =  ApartmentListing.
       find_by_sql(File.read('sqls/unit_prices.sql')).
+      select {|row| not row.attributes['trust'].nil? }.
       select {|row| row.attributes['trust'].downcase.eql? params[:trust].downcase }.
       select {|row| row.location.downcase.eql? params[:location].downcase }.
       select {|row| row.unitname.downcase.eql? params[:unitname].downcase }.
