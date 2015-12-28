@@ -67,30 +67,34 @@ class ChartsController < ApplicationController
     }
 
     @prices = datahash
-    @unit_prices =  ApartmentListing.
-      find_by_sql(File.read('sqls/unit_prices.sql'))
   end
 
   def unit
-    @prices =  ApartmentListing.
-      find_by_sql(File.read('sqls/unit_prices.sql')).
-      select {|row| not row.attributes['trust'].nil? }.
-      select {|row| row.attributes['trust'].downcase.eql? params[:trust].downcase }.
+    unit_data =  UnitPriceReport.
+      select {|row| row.trust.downcase.eql? params[:trust].downcase }.
       select {|row| row.location.downcase.eql? params[:location].downcase }.
       select {|row| row.unitname.downcase.eql? params[:unitname].downcase }.
       select {|row| row.unitnum.eql? params[:unitnum] }.
-      collect {|row|
-        {
-          :trust => row.attributes['trust'],
-          :location => row.attributes['location'],
-          :unitname => row.attributes['unitname'],
-          :unitnum => row.attributes['unitnum'],
-          :floor => row.attributes['floor'],
-          :sqft => row.attributes['sqft'],
-          :rent => row.attributes['rent'],
-          :movein => row.attributes['movein'],
-          :created_at => row.attributes['created_at'],
-        }
-      }
+      collect {|row| {
+        :date => row.attributes['date'],
+        :trust => row.attributes['trust'],
+        :location => row.attributes['location'],
+        :unitname => row.attributes['unitname'],
+        :unitnum => row.attributes['unitnum'],
+        :rent => row.attributes['rent'],
+        :movein => row.attributes['movein'],}}.
+      sort_by {|row| row[:date]}
+
+    @data = {
+      :trust => unit_data.first[:trust],
+      :location => unit_data.first[:location],
+      :unitnum => unit_data.first[:unitnum],
+      :unitname => unit_data.first[:unitname],
+      :dates => "'" + unit_data.collect {|up| up[:date].strftime('%Y-%m-%d') }.join("','") + "'",
+      :rents => unit_data.collect {|up| up[:rent] }.join(","),
+      :movein => unit_data.collect {|up| up[:movein] },
+    }
+
+    #binding.pry
   end
 end

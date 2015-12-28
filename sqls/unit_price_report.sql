@@ -59,7 +59,7 @@ idx_ranked_joined as
 	p.movein,
 	rank() over (partition by i.trust, i.location, i.unitname, i.unitnum, i.date order by p.fetched_at desc) daterank,
 	p.fetched_at,
-	i.date = p.fetched_on realdata
+	i.date = p.fetched_on priceupdated
 from idx i
 left outer join pricereport p 
 on i.trust = p.trust
@@ -77,6 +77,6 @@ select
 	date,
 	rent,
 	movein,
-	realdata
+	priceupdated
 from idx_ranked_joined
 where daterank = 1;

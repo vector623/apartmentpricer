@@ -1,26 +1,37 @@
-<table>
-  <tr>
-    <th>trust</td>
-    <th>location</td>
-    <th>unitname</td>
-    <th>unitnum</td>
-    <th>floor</td>
-    <th>sqft</td>
-    <th>rent</td>
-    <th>movein</td>
-    <th>created_at</td>
-  </tr>
-<% @prices.each do |price| %>
-  <tr>
-    <td><%= price[:trust] %></td>
-    <td><%= price[:location] %></td>
-    <td><%= price[:unitname] %></td>
-    <td><%= price[:unitnum] %></td>
-    <td><%= price[:floor] %></td>
-    <td><%= price[:sqft] %></td>
-    <td><%= price[:rent] %></td>
-    <td><%= price[:movein] %></td>
-    <td><%= price[:created_at] %></td>
-  </tr>
-<% end %>
-</table>
+<script>
+  $(function () {
+      $('#unit').highcharts({
+          title: {
+              text: 'Pricing for <%= @data[:unitnum] %>, <%= @data[:unitname] %> at <%= @data[:trust] %> <%= @data[:location] %>',
+              x: -20 //center
+          },
+          xAxis: {
+              categories: [<%= raw(@data[:dates]) %>]
+          },
+          yAxis: {
+              title: {
+                  text: 'Rent'
+              },
+              plotLines: [{
+                  value: 0,
+                  width: 1,
+                  color: '#808080'
+              }]
+          },
+          tooltip: {
+              valuePrefix: '$'
+          },
+          legend: {
+              layout: 'vertical',
+              align: 'right',
+              verticalAlign: 'middle',
+              borderWidth: 0
+          },
+          series: [{
+              name: 'rent',
+              data: [<%= @data[:rents] %>]
+          }]
+      });
+  });
+</script>
+<div id="unit"></div>
