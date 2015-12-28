@@ -88,17 +88,17 @@ class ChartsController < ApplicationController
         :rent => row.attributes['rent'],
         :movein => row.attributes['movein'],}}.
       sort_by {|row| row[:date]}
+    binding.pry
 
     @data = {
-      :trust => unit_data.first[:trust],
-      :location => unit_data.first[:location],
-      :unitnum => unit_data.first[:unitnum],
-      :unitname => unit_data.first[:unitname],
+      :trust => unit_data.last[:trust],
+      :location => unit_data.last[:location],
+      :unitnum => unit_data.last[:unitnum],
+      :unitname => unit_data.last[:unitname],
       :dates => "'" + unit_data.collect {|up| up[:date].strftime('%Y-%m-%d') }.join("','") + "'",
       :rents => unit_data.collect {|up| up[:rent] }.join(","),
       :movein => unit_data.collect {|up| up[:movein] },
     }
 
-    #binding.pry
   end
 end

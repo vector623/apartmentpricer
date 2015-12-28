@@ -105,7 +105,6 @@ class UpdatePriceReportView3 < ActiveRecord::Migration
           ranked.drank
         FROM ranked
         WHERE ranked.drank = 1
-        and unitnum = '1105'
         ORDER BY ranked.location, ranked.unitname, ranked.unitnum, ranked.rent;
 
       CREATE VIEW unit_price_report as
