@@ -1,0 +1,26 @@
+<table>
+  <tr>
+    <th>trust</td>
+    <th>location</td>
+    <th>unitname</td>
+    <th>unitnum</td>
+    <th>floor</td>
+    <th>sqft</td>
+    <th>rent</td>
+    <th>movein</td>
+    <th>created_at</td>
+  </tr>
+<% @prices.each do |price| %>
+  <tr>
+    <td><%= price[:trust] %></td>
+    <td><%= price[:location] %></td>
+    <td><%= price[:unitname] %></td>
+    <td><%= price[:unitnum] %></td>
+    <td><%= price[:floor] %></td>
+    <td><%= price[:sqft] %></td>
+    <td><%= price[:rent] %></td>
+    <td><%= price[:movein] %></td>
+    <td><%= price[:created_at] %></td>
+  </tr>
+<% end %>
+</table>

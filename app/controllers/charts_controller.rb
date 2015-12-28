@@ -70,4 +70,26 @@ class ChartsController < ApplicationController
     @unit_prices =  ApartmentListing.
       find_by_sql(File.read('sqls/unit_prices.sql'))
   end
+
+  def unit
+    @prices =  ApartmentListing.
+      find_by_sql(File.read('sqls/unit_prices.sql')).
+      select {|row| row.attributes['trust'].downcase.eql? params[:trust].downcase }.
+      select {|row| row.location.downcase.eql? params[:location].downcase }.
+      select {|row| row.unitname.downcase.eql? params[:unitname].downcase }.
+      select {|row| row.unitnum.eql? params[:unitnum] }.
+      collect {|row|
+        {
+          :trust => row.attributes['trust'],
+          :location => row.attributes['location'],
+          :unitname => row.attributes['unitname'],
+          :unitnum => row.attributes['unitnum'],
+          :floor => row.attributes['floor'],
+          :sqft => row.attributes['sqft'],
+          :rent => row.attributes['rent'],
+          :movein => row.attributes['movein'],
+          :created_at => row.attributes['created_at'],
+        }
+      }
+  end
 end

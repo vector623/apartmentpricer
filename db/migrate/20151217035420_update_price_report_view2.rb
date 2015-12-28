@@ -1,6 +1,8 @@
 class UpdatePriceReportView2 < ActiveRecord::Migration
   def up
     execute <<-SQL
+      DROP VIEW price_report;
+      CREATE OR REPLACE VIEW price_report AS 
       WITH page_pulls_with_recency as
       (select 
         id,
@@ -102,8 +104,9 @@ class UpdatePriceReportView2 < ActiveRecord::Migration
       ORDER BY ranked.location, ranked.unitname, ranked.unitnum, ranked.rent
     SQL
   end
-  def up
+  def down
     execute <<-SQL
+      DROP VIEW price_report;
       CREATE OR REPLACE VIEW price_report AS 
         WITH page_pulls_with_recency as
         (select 

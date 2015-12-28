@@ -56,7 +56,7 @@ class JobsController < ApplicationController
       'and id not in (select page_pull_id from apartment_listings)'
     unparsed_pagepulls = PagePull.find_by_sql(unparsed_pagepull_sql)
 
-    #target "x other units available >" link
+    #target listings that have "x other units available >" link
     div_classes = 'card-switch card-region-overlay pos-top pos-left pos-bottom inverted face-back'
     new_listings = unparsed_pagepulls.collect {|upp|
       Nokogiri::HTML(upp.dhtml).css("div[class='#{div_classes}']").
@@ -64,23 +64,36 @@ class JobsController < ApplicationController
         div.css('tr').
           select {|tr| tr.css('th').count == 0 }.
           collect {|tr|
-            ApartmentListing.new do |a|
+            ApartmentListing.new { |a|
               a.page_pull_id = upp.id
               a.unitname = div.css('h3').css('span')[0].text
               a.unitnum = tr.css('td')[0].text
               a.floor = tr.css('td')[1].text
               a.rent = tr.css('td')[2].text.gsub(/\$/,'')
               a.movein = tr.css('td')[3].text
-            end
+            }#end of ApartmentList.new
           }.flatten(1)#end of div.collect
       }.flatten(1)#end of Nokogiri.collect
     }.flatten(1)#end of unparsed_pagepulls.collect
 
-    #TODO: target apartment listings missing the "x other units available >" link
+    #target listings that DON'T have "x other units available >" link
+    div_classes = 'unit-cards face-front'
+    flat_listings = unparsed_pagepulls.collect {|upp|
+      Nokogiri::HTML(upp.dhtml).css("div[class='#{div_classes}']").
+      collect {|div|
+        ApartmentListing.new { |a|
+          a.page_pull_id = upp.id
+          a.unitname = div.css("div[class='panel-pane pane-entity-field pane-node-field-title-display inverted pos-left pos-bottom']").text
+          a.unitnum = div.css("div[class='unit-name']").text
+          a.floor = div.css("div[class='card unit-info'] span")[0].text
+          a.rent = div.css("div[class='price']").text
+          a.movein = div.css("div[class='bar-unit move-in']").text
+        }#end of ApartmentList.new
+      }
+    }
+    #binding.pry
 
-    ActiveRecord::Base.transaction do
-      new_listings.each do |l| l.save end
-    end
+    ActiveRecord::Base.transaction do new_listings.each do |l| l.save end end
   end
 
   def updatefloorplans_camden
@@ -115,8 +128,8 @@ class JobsController < ApplicationController
     end
   end
 
-  def pullcamdentest
-    pullcamden
+  def pullpages_test
+    pullpages
     render nothing: true
   end
   def parselistings_camdentest

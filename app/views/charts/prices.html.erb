@@ -67,12 +67,11 @@ $(function () {
             followPointer: true
         },
         plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}'
-                }
-            }
+          series: {
+            dataLabels: { enabled: true, format: '{point.name}' },
+            point: { events: { click: function() { location.href = this.options.url; } } },
+            cursor: 'pointer',
+          }
         },
 
         series: [
@@ -100,6 +99,7 @@ $(function () {
                       sqft: '<%= s[:sqft] %>',
                       sqft_per_dollar: '<%= s[:sqft_per_dollar] %>',
                       current: '<%= s[:current] %>',
+                      url: '/charts/unit?trust=<%= s[:trust]%>&location=<%= s[:location] %>&unitname=<%= s[:unitname] %>&unitnum=<%= s[:unitnum] %>',
                     },
                   <% end %>
               ]
@@ -115,8 +115,8 @@ $(function () {
 
 <div id="links">
   <h2>Links</h2>
-  <a href="https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9">Camden Dunwoody</a>
-  <a href="https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3">Camden Creekstone</a>
+  <a href="https://www.camdenliving.com/atlanta-ga-apartments/camden-creekstone/apartments?bedrooms[]=12&bedrooms[]=9">Camden Creekstone</a>
+  <a href="https://www.camdenliving.com/dunwoody-ga-apartments/camden-dunwoody/apartments?bedrooms[]=12&bedrooms[]=9&bedrooms[]=3">Camden Dunwoody</a>
 </div>
 
 <div id="data">
