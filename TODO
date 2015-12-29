@@ -1,0 +1,6 @@
+fix price_report
+  -want to rank by movein date, rent and bedroom count
+
+for unit_price_report
+  -create new price_report field, where rank is earliest date at price, ranked
+   by trust,loc,unitname and unitnum
