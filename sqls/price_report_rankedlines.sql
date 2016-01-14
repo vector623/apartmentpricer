@@ -16,7 +16,7 @@ FROM page_pulls),
 
 floor_plans_ranked AS 
 (SELECT 
-floor_plans.trust,
+  floor_plans.trust,
   floor_plans.location,
   floor_plans.name,
   floor_plans.beds,
@@ -82,9 +82,7 @@ ranked AS
       joined.trust,
       joined.location,
       joined.unitname,
-      joined.unitnum,
-      joined.rent,
-      joined.movein
+      joined.unitnum
     ORDER BY 
       joined.fetched_at DESC,
       joined.sqft_per_dollar DESC,
@@ -94,8 +92,7 @@ ranked AS
       joined.trust,
       joined.location,
       joined.unitname,
-      joined.unitnum,
-      joined.rent
+      joined.unitnum
     ORDER BY
       joined.fetched_at,
       uuid_generate_v4()) AS earlydaterank

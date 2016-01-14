@@ -131,7 +131,7 @@ class UpdateUnitPriceReport2 < ActiveRecord::Migration
         where daterank = 1;
     SQL
   end
-  def up
+  def down
     execute <<-SQL
       CREATE OR REPLACE VIEW unit_price_report AS 
         with pricereport as 
