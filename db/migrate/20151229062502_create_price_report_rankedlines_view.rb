@@ -1,7 +1,7 @@
 class CreatePriceReportRankedlinesView < ActiveRecord::Migration
   def up
     execute <<-SQL
-      CREATE OR REPLACE VIEW price_report_rankedlines AS 
+      CREATE OR REPLACE VIEW price_report_rankedlines AS
         WITH page_pulls_with_recency AS 
         (SELECT 
           page_pulls.id,
@@ -20,7 +20,7 @@ class CreatePriceReportRankedlinesView < ActiveRecord::Migration
 
         floor_plans_ranked AS 
         (SELECT 
-        floor_plans.trust,
+          floor_plans.trust,
           floor_plans.location,
           floor_plans.name,
           floor_plans.beds,
@@ -86,20 +86,21 @@ class CreatePriceReportRankedlinesView < ActiveRecord::Migration
               joined.trust,
               joined.location,
               joined.unitname,
-              joined.unitnum
-            ORDER BY 
-              joined.fetched_at DESC,
-              joined.sqft_per_dollar DESC,
-              uuid_generate_v4()) AS latedaterank,
+              joined.unitnum,
+              joined.fetched_at::date
+            ORDER BY
+              joined.fetched_at,
+              uuid_generate_v4()) AS earlydaterank,
           rank() OVER 
             (PARTITION BY 
               joined.trust,
               joined.location,
               joined.unitname,
-              joined.unitnum
-            ORDER BY
-              joined.fetched_at,
-              uuid_generate_v4()) AS earlydaterank
+              joined.unitnum,
+              joined.fetched_at::date
+            ORDER BY 
+              joined.fetched_at DESC,
+              uuid_generate_v4()) AS latedaterank
         FROM joined)
 
         SELECT
@@ -123,12 +124,12 @@ class CreatePriceReportRankedlinesView < ActiveRecord::Migration
           ranked.location,
           ranked.unitname,
           ranked.unitnum,
-          ranked.rent
+          ranked.fetched_at
     SQL
   end
   def down
     execute <<-SQL
-      DROP VIEW price_report_rankedlines;
+      --DROP VIEW price_report_rankedlines;
     SQL
   end
 end

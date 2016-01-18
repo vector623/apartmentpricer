@@ -82,20 +82,21 @@ ranked AS
       joined.trust,
       joined.location,
       joined.unitname,
-      joined.unitnum
-    ORDER BY 
-      joined.fetched_at DESC,
-      joined.sqft_per_dollar DESC,
-      uuid_generate_v4()) AS latedaterank,
+      joined.unitnum,
+      joined.fetched_at::date
+    ORDER BY
+      joined.fetched_at,
+      uuid_generate_v4()) AS earlydaterank,
   rank() OVER 
     (PARTITION BY 
       joined.trust,
       joined.location,
       joined.unitname,
-      joined.unitnum
-    ORDER BY
-      joined.fetched_at,
-      uuid_generate_v4()) AS earlydaterank
+      joined.unitnum,
+      joined.fetched_at::date
+    ORDER BY 
+      joined.fetched_at DESC,
+      uuid_generate_v4()) AS latedaterank
 FROM joined)
 
 SELECT
@@ -115,8 +116,11 @@ SELECT
   ranked.earlydaterank,
   ranked.latedaterank
 FROM ranked
+where ranked.unitnum = '6207'
+and earlydaterank = 1
 ORDER BY 
   ranked.location,
   ranked.unitname,
-          ranked.unitnum,
-          ranked.rent;
+  ranked.unitnum,
+  --ranked.rent,
+  ranked.fetched_at desc
