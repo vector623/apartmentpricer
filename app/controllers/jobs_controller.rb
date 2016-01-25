@@ -70,28 +70,13 @@ class JobsController < ApplicationController
               a.unitnum = tr.css('td')[0].text
               a.floor = tr.css('td')[1].text
               a.rent = tr.css('td')[2].text.gsub(/\$/,'')
-              a.movein = tr.css('td')[3].text
+              #they decided to leave off the year; 
+              #TODO: run SQL job to make sure that year matches next mo/day date after current date...
+              a.movein = Date.parse("#{tr.css('td')[3].text} #{Date.today.year}") 
             }#end of ApartmentList.new
           }.flatten(1)#end of div.collect
       }.flatten(1)#end of Nokogiri.collect
     }.flatten(1)#end of unparsed_pagepulls.collect
-
-    #target listings that DON'T have "x other units available >" link
-    div_classes = 'unit-cards face-front'
-    flat_listings = unparsed_pagepulls.collect {|upp|
-      Nokogiri::HTML(upp.dhtml).css("div[class='#{div_classes}']").
-      collect {|div|
-        ApartmentListing.new { |a|
-          a.page_pull_id = upp.id
-          a.unitname = div.css("div[class='panel-pane pane-entity-field pane-node-field-title-display inverted pos-left pos-bottom']").text
-          a.unitnum = div.css("div[class='unit-name']").text
-          a.floor = div.css("div[class='card unit-info'] span")[0].text
-          a.rent = div.css("div[class='price']").text
-          a.movein = div.css("div[class='bar-unit move-in']").text
-        }#end of ApartmentList.new
-      }
-    }
-    #binding.pry
 
     ActiveRecord::Base.transaction do new_listings.each do |l| l.save end end
   end
