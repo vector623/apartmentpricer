@@ -70,15 +70,15 @@ class JobsController < ApplicationController
               a.unitnum = tr.css('td')[0].text
               a.floor = tr.css('td')[1].text
               a.rent = tr.css('td')[2].text.gsub(/\$/,'')
-              #they decided to leave off the year; 
-              #TODO: run SQL job to make sure that year matches next mo/day date after current date...
-              a.movein = Date.parse("#{tr.css('td')[3].text} #{Date.today.year}") 
+              a.movein = Date.parse("#{tr.css('td')[3].text} #{Date.today.year}") #they decided to leave off the year; 
             }#end of ApartmentList.new
           }.flatten(1)#end of div.collect
       }.flatten(1)#end of Nokogiri.collect
     }.flatten(1)#end of unparsed_pagepulls.collect
 
     ActiveRecord::Base.transaction do new_listings.each do |l| l.save end end
+    #TODO: run SQL job to see if move in date is earlier than created date; if it us, increment
+    #by 1 year!!!
   end
 
   def updatefloorplans_camden
